@@ -1,9 +1,12 @@
+import AddBook from 'components/AddBook';
+import BookList from 'components/BooksLIst';
 import React from 'react';
 
 function App() {
   return (
     <div className='App'>
-      <div>React Application</div>
+      <BookList />
+      <AddBook />
     </div>
   );
 }
