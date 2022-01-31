@@ -1,6 +1,6 @@
-import { forwardRef } from 'react';
+import { forwardRef, memo } from 'react';
 
-interface Option {
+export interface Option {
   label: React.ReactNode;
   value: string | number | string[];
 }
@@ -47,4 +47,4 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>((props, ref) => {
   );
 });
 
-export default Select;
+export default memo(Select);

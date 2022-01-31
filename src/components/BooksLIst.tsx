@@ -1,10 +1,10 @@
 import { useQuery } from '@apollo/client';
 import React from 'react';
-import { GetBooks } from 'types';
+import { GetBooksData } from 'types';
 import { GET_BOOKS } from 'apollo/queries';
 
 const BookList = () => {
-  const { loading, error, data } = useQuery<GetBooks, null>(GET_BOOKS);
+  const { loading, error, data } = useQuery<GetBooksData, null>(GET_BOOKS);
 
   if (loading) {
     return <div>...loading</div>;

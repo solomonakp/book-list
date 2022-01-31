@@ -1,4 +1,4 @@
-import { forwardRef } from 'react';
+import { forwardRef, memo } from 'react';
 
 interface InputProps
   extends React.DetailedHTMLProps<
@@ -23,8 +23,6 @@ const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
     ...rest
   } = props;
 
-  console.log(props.value);
-
   return (
     <div className={`${className}`}>
       <label className={`${labelClassName}`} htmlFor={label.toLowerCase()}>
@@ -41,4 +39,4 @@ const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   );
 });
 
-export default Input;
+export default memo(Input);

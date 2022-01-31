@@ -1,8 +1,8 @@
 import React from 'react';
 import { useQuery } from '@apollo/client';
-import { GetBook } from 'types';
-import { GetBookData } from '../types';
-import { GET_BOOK } from '../apollo/queries';
+import { GetBookData, GetBookVar } from 'types';
+
+import { GET_BOOK } from 'apollo/queries';
 
 interface Props {
   authorId: string;
@@ -11,7 +11,7 @@ interface Props {
 const BookDetails = (props: Props) => {
   const { authorId } = props;
 
-  const { loading, data, error } = useQuery<GetBook, GetBookData>(GET_BOOK, {
+  const { loading, data, error } = useQuery<GetBookData, GetBookVar>(GET_BOOK, {
     variables: { id: authorId },
   });
 

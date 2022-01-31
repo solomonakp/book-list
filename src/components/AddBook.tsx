@@ -1,11 +1,18 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useMutation, useQuery } from '@apollo/client';
+import { useState, useEffect } from 'react';
 
 // components
-import Button from './Button';
-import Input from './Input';
-import Select from './Select';
+import Button from 'components/Button';
+import Input from 'components/Input';
+import Select, { Option } from 'components/Select';
+
+import { GET_AUTHORS, ADD_BOOK, GET_BOOKS } from 'apollo/queries';
+import { Book, GetAuthorsData } from 'types';
+import { createOptions } from 'utils/functions';
+import { NewBookDetails } from 'types';
 
 interface Inputs {
   title: string;
@@ -25,16 +32,44 @@ const schema = yup
   .required();
 
 const AddBook = () => {
+  const [options, setOptions] = useState<Array<Option>>([
+    { label: 'Loading', value: 'none' },
+  ]);
+
   const {
     register,
     handleSubmit,
     formState: { errors },
+    watch,
   } = useForm<Inputs>({
     resolver: yupResolver(schema),
   });
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
-  console.log(errors);
+  const { author, genre, title } = watch();
+
+  const { data, loading } = useQuery<GetAuthorsData>(GET_AUTHORS);
+
+  const [addedBook] = useMutation<{ addBooks: Book }, NewBookDetails>(
+    ADD_BOOK,
+    {
+      variables: {
+        genre,
+        title,
+        authorId: author,
+      },
+      refetchQueries: [GET_BOOKS, 'getBooks'],
+    }
+  );
+
+  // update select with authors from backend
+  useEffect(() => {
+    if (data) {
+      setOptions(createOptions(data.authors));
+    }
+  }, [loading, data]);
+
+  const onSubmit: SubmitHandler<Inputs> = (data) => addedBook();
+
   return (
     /* "handleSubmit" will validate your inputs before invoking "onSubmit" */
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -52,7 +87,8 @@ const AddBook = () => {
         label='Author'
         error={errors.author?.message}
         {...register('author', { required: true })}
-        options={[{ label: 'choose an author', value: '001' }]}
+        options={options}
+        disabled={loading}
       />
       <Button>Add Book</Button>
     </form>

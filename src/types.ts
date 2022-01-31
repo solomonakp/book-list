@@ -8,18 +8,31 @@ export interface Book {
 interface Author {
   age: number;
   name: string;
-}
-
-export interface GetBook {
-  book: Book;
+  id: string;
 }
 
 export interface GetBookData {
+  book: Book;
+}
+
+export interface GetBookVar {
   id: string;
 }
 
 export type Books = Array<Book>;
 
-export interface GetBooks {
+export interface GetBooksData {
   books: Books;
+}
+
+export type Authors = Array<Author>;
+
+export interface GetAuthorsData {
+  authors: Authors;
+}
+
+export interface NewBookDetails {
+  title: string;
+  genre: string;
+  authorId: string;
 }

@@ -3,8 +3,8 @@ import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 
 // components
-import Button from './Button';
-import Input from './Input';
+import Button from 'components/Button';
+import Input from 'components/Input';
 
 interface Inputs {
   name: string;
@@ -28,7 +28,7 @@ const AddAuthor = () => {
   });
 
   const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
-  console.log(errors);
+
   return (
     /* "handleSubmit" will validate your inputs before invoking "onSubmit" */
     <form onSubmit={handleSubmit(onSubmit)}>
