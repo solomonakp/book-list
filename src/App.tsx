@@ -8,7 +8,7 @@ function App() {
     <div className='App'>
       <BookList />
       <AddBook />
-      <BookDetails authorId='61c2d71fe21794293f4bd365' />
+      <BookDetails bookId='61c2d71fe21794293f4bd365' />
     </div>
   );
 }

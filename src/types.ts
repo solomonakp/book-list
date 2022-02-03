@@ -2,7 +2,7 @@ export interface Book {
   title: string;
   genre: string;
   authorId: string;
-  author?: Author;
+  author: Author;
 }
 
 interface Author {
@@ -16,7 +16,7 @@ export interface GetBookData {
 }
 
 export interface GetBookVar {
-  id: string;
+  bookId: string;
 }
 
 export type Books = Array<Book>;

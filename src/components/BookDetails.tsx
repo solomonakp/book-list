@@ -5,14 +5,14 @@ import { GetBookData, GetBookVar } from 'types';
 import { GET_BOOK } from 'apollo/queries';
 
 interface Props {
-  authorId: string;
+  bookId: string;
 }
 
 const BookDetails = (props: Props) => {
-  const { authorId } = props;
+  const { bookId } = props;
 
   const { loading, data, error } = useQuery<GetBookData, GetBookVar>(GET_BOOK, {
-    variables: { id: authorId },
+    variables: { bookId },
   });
 
   if (loading) {
@@ -23,14 +23,20 @@ const BookDetails = (props: Props) => {
     return <div>{error.message}</div>;
   }
 
+  const {
+    book: {
+      title,
+      genre,
+      author: { age, name },
+    },
+  } = data!;
   return (
     <div className='card'>
       <p>Book Details go here</p>
-
-      <p>{data?.book.title}</p>
-      <p>{data?.book.genre}</p>
-      <p>{data?.book.author?.age}</p>
-      <p>{data?.book.author?.name}</p>
+      <p>{title}</p>
+      <p>{genre}</p>
+      <p>{age}</p>
+      <p>{name}</p>
     </div>
   );
 };
