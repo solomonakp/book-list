@@ -1,4 +1,4 @@
-import { Authors } from 'types';
+import { Authors, Books } from 'types';
 
 export const createOptions = (authors: Authors) => {
   const options = authors.map(({ name, id }) => {
@@ -6,4 +6,12 @@ export const createOptions = (authors: Authors) => {
   });
 
   return options;
+};
+
+export const filterBooksByTitle = (books: Books, currentBookTitle: string) => {
+  const filteredBooksByTitle = books.filter(({ title }) => {
+    return title !== currentBookTitle;
+  });
+
+  return filteredBooksByTitle;
 };

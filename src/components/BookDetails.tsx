@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { useQuery } from '@apollo/client';
-import { GetBookData, GetBookVar } from 'types';
-
+import { GetBookData, GetBookVar, BookId } from 'types';
 import { GET_BOOK } from 'apollo/queries';
+import { filterBooksByTitle } from 'utils/functions';
 
 interface Props {
-  bookId: string;
+  bookId: BookId;
 }
 
 const BookDetails = (props: Props) => {
@@ -13,6 +13,7 @@ const BookDetails = (props: Props) => {
 
   const { loading, data, error } = useQuery<GetBookData, GetBookVar>(GET_BOOK, {
     variables: { bookId },
+    skip: !bookId,
   });
 
   if (loading) {
@@ -23,22 +24,41 @@ const BookDetails = (props: Props) => {
     return <div>{error.message}</div>;
   }
 
-  const {
-    book: {
-      title,
-      genre,
-      author: { age, name },
-    },
-  } = data!;
+  if (data) {
+    const {
+      book: {
+        title,
+        genre,
+        author: { books, name },
+      },
+    } = data;
+
+    const filterBooks = filterBooksByTitle(books, title);
+
+    return (
+      <div className='book-details'>
+        <h2 className='mb-8 font-semibold text-2xl mt-14'>{title}</h2>
+        <p className='book-detail'>Genre: {genre}</p>
+        <p className='book-detail'>Author: {name}</p>
+        <p className='mb-2 text-lg'>Other books by this Author:</p>
+        <ul>
+          {filterBooks.map(({ title, id }) => {
+            return (
+              <li key={id} className='mb-2'>
+                {title}
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    );
+  }
+
   return (
-    <div className='card'>
-      <p>Book Details go here</p>
-      <p>{title}</p>
-      <p>{genre}</p>
-      <p>{age}</p>
-      <p>{name}</p>
+    <div className='book-details'>
+      <p>Click on a book to show its details here</p>
     </div>
   );
 };
 
-export default BookDetails;
+export default memo(BookDetails);

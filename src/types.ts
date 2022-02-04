@@ -3,12 +3,14 @@ export interface Book {
   genre: string;
   authorId: string;
   author: Author;
+  id: string;
 }
 
 interface Author {
   age: number;
   name: string;
   id: string;
+  books: Books;
 }
 
 export interface GetBookData {
@@ -16,7 +18,7 @@ export interface GetBookData {
 }
 
 export interface GetBookVar {
-  bookId: string;
+  bookId: BookId;
 }
 
 export type Books = Array<Book>;
@@ -36,3 +38,5 @@ export interface NewBookDetails {
   genre: string;
   authorId: string;
 }
+
+export type BookId = string | null;

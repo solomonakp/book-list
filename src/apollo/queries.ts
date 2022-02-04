@@ -28,6 +28,10 @@ export const GET_BOOK = gql`
       author {
         name
         age
+        books {
+          title
+          id
+        }
       }
     }
   }

@@ -72,21 +72,24 @@ const AddBook = () => {
 
   return (
     /* "handleSubmit" will validate your inputs before invoking "onSubmit" */
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(onSubmit)} className='p-4'>
+      <h3>Add a Book</h3>
       <Input
         label='Title'
         error={errors.title?.message}
-        {...register('title', { required: true })}
+        {...register('title')}
+        type='text'
       />
       <Input
         label='Genre'
         error={errors.genre?.message}
-        {...register('genre', { required: true })}
+        {...register('genre')}
+        type='text'
       />
       <Select
         label='Author'
         error={errors.author?.message}
-        {...register('author', { required: true })}
+        {...register('author')}
         options={options}
         disabled={loading}
       />
