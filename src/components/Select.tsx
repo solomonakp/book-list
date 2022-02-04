@@ -31,18 +31,27 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>((props, ref) => {
   } = props;
 
   return (
-    <div className={`${className}`}>
-      <label className={`${labelClassName}`} htmlFor={label}>
+    <div className={`${className} group mb-2`}>
+      <label
+        className={`${labelClassName} label ${error ? 'text-red-600' : ''}`}
+        htmlFor={label}
+      >
         {label}
       </label>
-      <select ref={ref} {...rest}>
+      <select
+        ref={ref}
+        {...rest}
+        className={`form-select select ${
+          error ? 'text-red-600 border-red-600' : ''
+        }`}
+      >
         {options.map(({ label, value }, index) => (
           <option value={value} key={index}>
             {label}
           </option>
         ))}
       </select>
-      <p className={`${errorClassNames}`}>{error}</p>
+      <p className={`${errorClassNames} error`}>{error}</p>
     </div>
   );
 });

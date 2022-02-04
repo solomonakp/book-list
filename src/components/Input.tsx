@@ -24,24 +24,22 @@ const Input = forwardRef<HTMLInputElement, InputProps>((props, ref) => {
   } = props;
 
   return (
-    <div className={`${className} group mb-4`}>
+    <div className={`${className} group mb-2`}>
       <label
-        className={`${labelClassName} block text-sm font-medium text-gray-700 mb-1 group-focus-within:text-blue-700 transition  ${
-          error ? 'text-red-600' : ''
-        }`}
+        className={`${labelClassName} label  ${error ? 'text-red-600' : ''}`}
         htmlFor={label.toLowerCase()}
       >
         {label}
       </label>
       <input
-        className={`${inputClassName}  focus:ring-blue-700 focus:border-blue-700 block  pl-3 pr-12 sm:text-sm border-gray-300 rounded  transition ${
+        className={`${inputClassName} input ${
           error ? 'text-red-600 border-red-600' : ''
         }`}
         id={label.toLowerCase()}
         ref={ref}
         {...rest}
       />
-      <p className={`${errorClassNames} text-red-600 h-4`}>{error}</p>
+      <p className={`${errorClassNames} error`}>{error}</p>
     </div>
   );
 });

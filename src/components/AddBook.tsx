@@ -33,7 +33,7 @@ const schema = yup
 
 const AddBook = () => {
   const [options, setOptions] = useState<Array<Option>>([
-    { label: 'Loading', value: 'none' },
+    { label: 'Select Author ', value: '' },
   ]);
 
   const {
@@ -64,7 +64,7 @@ const AddBook = () => {
   // update select with authors from backend
   useEffect(() => {
     if (data) {
-      setOptions(createOptions(data.authors));
+      setOptions((options) => [...options, ...createOptions(data.authors)]);
     }
   }, [loading, data]);
 
@@ -74,26 +74,28 @@ const AddBook = () => {
     /* "handleSubmit" will validate your inputs before invoking "onSubmit" */
     <form onSubmit={handleSubmit(onSubmit)} className='p-4'>
       <h3>Add a Book</h3>
-      <Input
-        label='Title'
-        error={errors.title?.message}
-        {...register('title')}
-        type='text'
-      />
-      <Input
-        label='Genre'
-        error={errors.genre?.message}
-        {...register('genre')}
-        type='text'
-      />
-      <Select
-        label='Author'
-        error={errors.author?.message}
-        {...register('author')}
-        options={options}
-        disabled={loading}
-      />
-      <Button>Add Book</Button>
+      <div className='max-w-xs'>
+        <Input
+          label='Title'
+          error={errors.title?.message}
+          {...register('title')}
+          type='text'
+        />
+        <Input
+          label='Genre'
+          error={errors.genre?.message}
+          {...register('genre')}
+          type='text'
+        />
+        <Select
+          label='Author'
+          error={errors.author?.message}
+          {...register('author')}
+          options={options}
+          disabled={loading}
+        />
+        <Button>Add Book</Button>
+      </div>
     </form>
   );
 };
