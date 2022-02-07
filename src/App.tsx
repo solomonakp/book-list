@@ -1,12 +1,13 @@
-import AddBook from 'components/AddBook';
 import Books from 'components/Books';
 import React from 'react';
+import AddEntity from 'components/AddEntity';
+import 'simplebar/dist/simplebar.min.css';
 
 function App() {
   return (
-    <div className='App'>
+    <div className='App grid lg:grid-cols-3 grid-col-1 container mx-auto'>
       <Books />
-      <AddBook />
+      <AddEntity />
     </div>
   );
 }

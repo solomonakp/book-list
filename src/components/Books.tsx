@@ -29,14 +29,14 @@ const Books = () => {
   }
 
   return (
-    <div id='books' className='grid lg:grid-cols-3 grid-col-1'>
+    <>
       <BookList
         books={data?.books}
         clickAction={delegateSelectedBook}
         selectedBook={bookId}
       />
       <BookDetails bookId={bookId} />
-    </div>
+    </>
   );
 };
 

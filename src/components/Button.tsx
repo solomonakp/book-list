@@ -17,4 +17,13 @@ const Button: React.FC<ButtonProps> = (props) => {
   );
 };
 
+export const IconButton: React.FC<ButtonProps> = (props) => {
+  const { children, className, ...rest } = props;
+
+  return (
+    <button className={`${className} icon-btn`} {...rest}>
+      {children}
+    </button>
+  );
+};
 export default Button;

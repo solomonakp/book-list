@@ -72,9 +72,9 @@ const AddBook = () => {
 
   return (
     /* "handleSubmit" will validate your inputs before invoking "onSubmit" */
-    <form onSubmit={handleSubmit(onSubmit)} className='p-4'>
-      <h3>Add a Book</h3>
-      <div className='max-w-xs'>
+    <form onSubmit={handleSubmit(onSubmit)} className='lg:min-h-[350.33px]'>
+      <h3 className='font-medium leading-tight text-3xl'>Add a Book</h3>
+      <div className='max-w-xs mt-3'>
         <Input
           label='Title'
           error={errors.title?.message}
@@ -94,7 +94,7 @@ const AddBook = () => {
           options={options}
           disabled={loading}
         />
-        <Button>Add Book</Button>
+        <Button className='mt-2'>Add</Button>
       </div>
     </form>
   );

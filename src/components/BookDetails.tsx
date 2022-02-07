@@ -55,7 +55,7 @@ const BookDetails = (props: Props) => {
   }
 
   return (
-    <div className='book-details'>
+    <div className='book-details flex justify-center items-center'>
       <p>Click on a book to show its details here</p>
     </div>
   );
