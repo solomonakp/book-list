@@ -36,7 +36,7 @@ const BookDetails = (props: Props) => {
     const filterBooks = filterBooksByTitle(books, title);
 
     return (
-      <div className='book-details'>
+      <div className='book-details '>
         <h2 className='mb-8 font-semibold text-2xl mt-14'>{title}</h2>
         <p className='book-detail'>Genre: {genre}</p>
         <p className='book-detail'>Author: {name}</p>

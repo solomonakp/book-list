@@ -5,6 +5,9 @@ module.exports = {
   mode: 'jit',
   theme: {
     extend: {
+      colors: {
+        fogra: '#00171f',
+      },
       fontFamily: {
         sans: ['Open Sans', ...defaultTheme.fontFamily.sans],
       },

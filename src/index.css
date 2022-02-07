@@ -4,7 +4,7 @@
 
 @layer components {
   .book-details {
-    @apply h-full relative p-4 min-h-[18.75rem] row-span-1 lg:row-span-2;
+    @apply h-full relative p-4 min-h-[18.75rem];
   }
   .book-detail {
     @apply text-xl mb-3;

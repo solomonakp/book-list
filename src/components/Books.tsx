@@ -35,7 +35,9 @@ const Books = () => {
         clickAction={delegateSelectedBook}
         selectedBook={bookId}
       />
-      <BookDetails bookId={bookId} />
+      <div className='bg-fogra text-white row-span-1 lg:row-span-2 drop-shadow-2xl'>
+        <BookDetails bookId={bookId} />
+      </div>
     </>
   );
 };
