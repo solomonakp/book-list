@@ -16,13 +16,19 @@
     @apply text-red-600 h-4;
   }
   .btn {
-    @apply inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out;
+    @apply inline-block px-6 py-2.5 bg-prussian text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-cg hover:shadow-lg focus:bg-cg focus:shadow-lg focus:outline-none focus:ring-0 active:bg-cg active:shadow-lg transition duration-150 ease-in-out;
   }
   .icon-btn {
     @apply inline-block rounded-full bg-blue-600 text-white leading-normal uppercase shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out w-9 h-9 p-2;
   }
   .input {
     @apply w-full focus:ring-blue-700 focus:border-blue-700 block  pl-3 pr-12 sm:text-sm border-gray-300 rounded  transition;
+  }
+  .after-color-1 {
+    @apply after:bg-cg;
+  }
+  .afer-color-2 {
+    @apply after:bg-white;
   }
   .select {
     @apply appearance-none

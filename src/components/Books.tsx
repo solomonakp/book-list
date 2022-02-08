@@ -4,6 +4,7 @@ import { GetBooksData, BookId } from 'types';
 import { GET_BOOKS } from 'apollo/queries';
 import BookDetails from 'components/BookDetails';
 import BookList from 'components/BooksLIst';
+import Loader from 'components/Loader';
 
 const Books = () => {
   const { loading, error, data } = useQuery<GetBooksData, null>(GET_BOOKS);
@@ -21,7 +22,7 @@ const Books = () => {
   );
 
   if (loading) {
-    return <div>...loading</div>;
+    return <Loader fixed />;
   }
 
   if (error) {

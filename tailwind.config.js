@@ -7,6 +7,9 @@ module.exports = {
     extend: {
       colors: {
         fogra: '#00171f',
+        crayola: '#00A7E1',
+        prussian: '#003459',
+        cg: '#007EA7',
       },
       fontFamily: {
         sans: ['Open Sans', ...defaultTheme.fontFamily.sans],

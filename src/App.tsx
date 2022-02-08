@@ -5,7 +5,7 @@ import 'simplebar/dist/simplebar.min.css';
 
 function App() {
   return (
-    <div className='App grid lg:grid-cols-3 grid-col-1 min-h-screen'>
+    <div className='App grid lg:grid-cols-3 grid-col-1 min-h-screen bg-white'>
       <Books />
       <AddEntity />
     </div>

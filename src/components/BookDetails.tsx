@@ -3,6 +3,7 @@ import { useQuery } from '@apollo/client';
 import { GetBookData, GetBookVar, BookId } from 'types';
 import { GET_BOOK } from 'apollo/queries';
 import { filterBooksByTitle } from 'utils/functions';
+import Loader from 'components/Loader';
 
 interface Props {
   bookId: BookId;
@@ -17,7 +18,7 @@ const BookDetails = (props: Props) => {
   });
 
   if (loading) {
-    return <div>...loading</div>;
+    return <Loader />;
   }
 
   if (error) {

@@ -31,8 +31,10 @@ const AddAuthor = () => {
 
   return (
     /* "handleSubmit" will validate your inputs before invoking "onSubmit" */
-    <form onSubmit={handleSubmit(onSubmit)} className='lg:min-h-[350.33px]'>
-      <h3 className='font-medium leading-tight text-3xl'>Add a Author</h3>
+    <form onSubmit={handleSubmit(onSubmit)} className='min-h-[350.33px]'>
+      <h3 className='font-medium leading-tight text-3xl text-prussian'>
+        Add a Author
+      </h3>
 
       <div className='max-w-xs mt-3'>
         <Input
