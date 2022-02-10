@@ -1,10 +1,16 @@
-import { useForm, SubmitHandler } from 'react-hook-form';
 import * as yup from 'yup';
+import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { useMutation } from '@apollo/client';
 
 // components
 import Button from 'components/Button';
 import Input from 'components/Input';
+
+// types and queries
+import { NewAuthorDetails, Author } from 'types';
+import { ADD_AUTHOR } from 'apollo/queries';
+import { GET_AUTHORS } from '../apollo/queries';
 
 interface Inputs {
   name: string;
@@ -18,16 +24,33 @@ const schema = yup
   })
   .required();
 
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
 const AddAuthor = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isDirty, isSubmitting, isValid },
+    watch,
   } = useForm<Inputs>({
     resolver: yupResolver(schema),
+    mode: 'onChange',
   });
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+  const { name, age } = watch();
+
+  const [addAuthor] = useMutation<{ addAuthor: Author }, NewAuthorDetails>(
+    ADD_AUTHOR,
+    {
+      variables: {
+        name,
+        age: Number(age),
+      },
+      refetchQueries: [GET_AUTHORS, 'getAuthors'],
+    }
+  );
+
+  const onSubmit: SubmitHandler<Inputs> = async (data) => await sleep(5000);
 
   return (
     /* "handleSubmit" will validate your inputs before invoking "onSubmit" */
@@ -52,7 +75,14 @@ const AddAuthor = () => {
             pattern: { value: /^[0-9]+$/, message: 'Please Enter a number' },
           })}
         />
-        <Button className='mt-2'>Add</Button>
+        <Button
+          className='mt-2'
+          disabled={!isDirty || !isValid || isSubmitting}
+          role='button'
+          type='submit'
+        >
+          Add
+        </Button>
       </div>
     </form>
   );

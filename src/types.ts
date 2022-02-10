@@ -1,3 +1,7 @@
+export type Books = Array<Book>;
+
+export type BookId = string | null;
+
 export interface Book {
   title: string;
   genre: string;
@@ -6,7 +10,7 @@ export interface Book {
   id: string;
 }
 
-interface Author {
+export interface Author {
   age: number;
   name: string;
   id: string;
@@ -20,8 +24,6 @@ export interface GetBookData {
 export interface GetBookVar {
   bookId: BookId;
 }
-
-export type Books = Array<Book>;
 
 export interface GetBooksData {
   books: Books;
@@ -39,4 +41,7 @@ export interface NewBookDetails {
   authorId: string;
 }
 
-export type BookId = string | null;
+export interface NewAuthorDetails {
+  name: string;
+  age: number;
+}

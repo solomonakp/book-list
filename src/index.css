@@ -16,7 +16,7 @@
     @apply text-red-600 h-4;
   }
   .btn {
-    @apply inline-block px-6 py-2.5 bg-prussian text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-cg hover:shadow-lg focus:bg-cg focus:shadow-lg focus:outline-none focus:ring-0 active:bg-cg active:shadow-lg transition duration-150 ease-in-out;
+    @apply inline-block px-6 py-2.5 bg-prussian text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-cg hover:shadow-lg focus:bg-cg focus:shadow-lg focus:outline-none focus:ring-0 active:bg-cg active:shadow-lg transition duration-150 ease-in-out disabled:bg-gray-600;
   }
   .icon-btn {
     @apply inline-block rounded-full bg-blue-600 text-white leading-normal uppercase shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out w-9 h-9 p-2;

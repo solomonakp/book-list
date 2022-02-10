@@ -39,27 +39,26 @@ const AddBook = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isDirty, isSubmitting, isValid },
     watch,
+    reset,
   } = useForm<Inputs>({
     resolver: yupResolver(schema),
+    mode: 'onChange',
   });
 
   const { author, genre, title } = watch();
 
   const { data, loading } = useQuery<GetAuthorsData>(GET_AUTHORS);
 
-  const [addedBook] = useMutation<{ addBooks: Book }, NewBookDetails>(
-    ADD_BOOK,
-    {
-      variables: {
-        genre,
-        title,
-        authorId: author,
-      },
-      refetchQueries: [GET_BOOKS, 'getBooks'],
-    }
-  );
+  const [addBook] = useMutation<{ addBooks: Book }, NewBookDetails>(ADD_BOOK, {
+    variables: {
+      genre,
+      title,
+      authorId: author,
+    },
+    refetchQueries: [GET_BOOKS, 'getBooks'],
+  });
 
   // update select with authors from backend
   useEffect(() => {
@@ -68,7 +67,10 @@ const AddBook = () => {
     }
   }, [loading, data]);
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => addedBook();
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    await addBook();
+    reset();
+  };
 
   return (
     /* "handleSubmit" will validate your inputs before invoking "onSubmit" */
@@ -96,7 +98,14 @@ const AddBook = () => {
           options={options}
           disabled={loading}
         />
-        <Button className='mt-2'>Add</Button>
+        <Button
+          className='mt-2'
+          role='button'
+          type='submit'
+          disabled={!isDirty || !isValid || isSubmitting}
+        >
+          Add
+        </Button>
       </div>
     </form>
   );

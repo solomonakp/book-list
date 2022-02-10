@@ -1,13 +1,15 @@
-import { useQuery } from '@apollo/client';
-import React, { useState, useCallback } from 'react';
-import { GetBooksData, BookId } from 'types';
-import { GET_BOOKS } from 'apollo/queries';
+import { useState, useCallback, FC } from 'react';
+import { BookId, Books as BooksType } from 'types';
+
 import BookDetails from 'components/BookDetails';
 import BookList from 'components/BooksLIst';
-import Loader from 'components/Loader';
 
-const Books = () => {
-  const { loading, error, data } = useQuery<GetBooksData, null>(GET_BOOKS);
+interface BookProps {
+  books: BooksType | undefined;
+}
+
+const Books: FC<BookProps> = (props) => {
+  const { books } = props;
 
   const [bookId, setBookId] = useState<BookId>(null);
 
@@ -21,22 +23,14 @@ const Books = () => {
     [bookId]
   );
 
-  if (loading) {
-    return <Loader fixed />;
-  }
-
-  if (error) {
-    return <div>{error.message}</div>;
-  }
-
   return (
     <>
       <BookList
-        books={data?.books}
+        books={books}
         clickAction={delegateSelectedBook}
         selectedBook={bookId}
       />
-      <div className='bg-fogra text-white row-span-1 lg:row-span-2 drop-shadow-2xl'>
+      <div className='bg-fogra text-white row-span-1 lg:row-span-2 drop-shadow-2xl min-h-[26rem]'>
         <BookDetails bookId={bookId} />
       </div>
     </>
