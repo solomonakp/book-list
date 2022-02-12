@@ -24,14 +24,13 @@ const schema = yup
   })
   .required();
 
-const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
 const AddAuthor = () => {
   const {
     register,
     handleSubmit,
     formState: { errors, isDirty, isSubmitting, isValid },
     watch,
+    reset,
   } = useForm<Inputs>({
     resolver: yupResolver(schema),
     mode: 'onChange',
@@ -50,10 +49,12 @@ const AddAuthor = () => {
     }
   );
 
-  const onSubmit: SubmitHandler<Inputs> = async (data) => await sleep(5000);
+  const onSubmit: SubmitHandler<Inputs> = async (data) => {
+    await addAuthor();
+    // reset();
+  };
 
   return (
-    /* "handleSubmit" will validate your inputs before invoking "onSubmit" */
     <form onSubmit={handleSubmit(onSubmit)} className='min-h-[350.33px]'>
       <h3 className='font-medium leading-tight text-3xl text-prussian'>
         Add a Author
