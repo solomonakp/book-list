@@ -11,6 +11,7 @@ import Input from 'components/Input';
 import { NewAuthorDetails, Author } from 'types';
 import { ADD_AUTHOR } from 'apollo/queries';
 import { GET_AUTHORS } from '../apollo/queries';
+import { useEffect } from 'react';
 
 interface Inputs {
   name: string;
@@ -38,19 +39,27 @@ const AddAuthor = () => {
 
   const { name, age } = watch();
 
-  const [addAuthor] = useMutation<{ addAuthor: Author }, NewAuthorDetails>(
-    ADD_AUTHOR,
-    {
-      variables: {
-        name,
-        age: Number(age),
-      },
-      refetchQueries: [GET_AUTHORS, 'getAuthors'],
+  const [addAuthor, { error }] = useMutation<
+    { addAuthor: Author },
+    NewAuthorDetails
+  >(ADD_AUTHOR, {
+    variables: {
+      name,
+      age: Number(age),
+    },
+    refetchQueries: [GET_AUTHORS, 'getAuthors'],
+  });
+
+  useEffect(() => {
+    if (error) {
+      console.log(error[0]);
     }
-  );
+  }, [error]);
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    await addAuthor();
+    const res = await addAuthor();
+
+    console.log(res, 'res');
     // reset();
   };
 
