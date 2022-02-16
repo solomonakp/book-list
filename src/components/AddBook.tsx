@@ -39,7 +39,7 @@ const AddBook = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isDirty, isSubmitting, isValid },
+    formState: { errors, isDirty, isSubmitting, isValid, isSubmitSuccessful },
     watch,
     reset,
   } = useForm<Inputs>({
@@ -47,9 +47,15 @@ const AddBook = () => {
     mode: 'onChange',
   });
 
+  useEffect(() => {
+    if (isSubmitSuccessful) {
+      reset();
+    }
+  }, [isSubmitSuccessful, reset]);
+
   const { author, genre, title } = watch();
 
-  const { data, loading } = useQuery<GetAuthorsData>(GET_AUTHORS);
+  const { data, loading } = useQuery<GetAuthorsData>(GET_AUTHORS, {});
 
   const [addBook] = useMutation<{ addBooks: Book }, NewBookDetails>(ADD_BOOK, {
     variables: {
@@ -57,7 +63,7 @@ const AddBook = () => {
       title,
       authorId: author,
     },
-    refetchQueries: [GET_BOOKS, 'getBooks'],
+    refetchQueries: [GET_BOOKS, 'GetBooks'],
   });
 
   // update select with authors from backend
@@ -67,10 +73,7 @@ const AddBook = () => {
     }
   }, [loading, data]);
 
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    await addBook();
-    reset();
-  };
+  const onSubmit: SubmitHandler<Inputs> = async (data) => await addBook();
 
   return (
     /* "handleSubmit" will validate your inputs before invoking "onSubmit" */

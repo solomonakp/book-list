@@ -35,22 +35,26 @@ const BookDetails = (props: Props) => {
     } = data;
 
     const filterBooks = filterBooksByTitle(books, title);
-
     return (
       <div className='book-details '>
         <h2 className='mb-8 font-semibold text-2xl mt-14'>{title}</h2>
         <p className='book-detail'>Genre: {genre}</p>
         <p className='book-detail'>Author: {name}</p>
-        <p className='mb-2 text-lg'>Other books by this Author:</p>
-        <ul>
-          {filterBooks.map(({ title, id }) => {
-            return (
-              <li key={id} className='mb-2'>
-                {title}
-              </li>
-            );
-          })}
-        </ul>
+        {Boolean(filterBooks.length) && (
+          <>
+            {' '}
+            <p className='mb-2 text-lg'>Other books by this Author:</p>
+            <ul>
+              {filterBooks.map(({ title, id }) => {
+                return (
+                  <li key={id} className='mb-2'>
+                    {title}
+                  </li>
+                );
+              })}
+            </ul>
+          </>
+        )}
       </div>
     );
   }

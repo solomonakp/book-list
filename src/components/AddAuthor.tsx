@@ -12,6 +12,8 @@ import { NewAuthorDetails, Author } from 'types';
 import { ADD_AUTHOR } from 'apollo/queries';
 import { GET_AUTHORS } from '../apollo/queries';
 import { useEffect } from 'react';
+import { Store } from 'react-notifications-component';
+import { notificationSettings } from 'utils/functions';
 
 interface Inputs {
   name: string;
@@ -29,7 +31,7 @@ const AddAuthor = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors, isDirty, isSubmitting, isValid },
+    formState: { errors, isDirty, isSubmitting, isValid, isSubmitSuccessful },
     watch,
     reset,
   } = useForm<Inputs>({
@@ -47,21 +49,33 @@ const AddAuthor = () => {
       name,
       age: Number(age),
     },
-    refetchQueries: [GET_AUTHORS, 'getAuthors'],
+    refetchQueries: [GET_AUTHORS, 'GetAuthors'],
+    awaitRefetchQueries: true,
   });
 
   useEffect(() => {
     if (error) {
-      console.log(error[0]);
+      console.log('yeah');
+      const id = Store.addNotification({
+        ...notificationSettings,
+        type: 'danger',
+        title: 'Error',
+        message: error.message,
+        container: 'top-right',
+      });
+      return () => {
+        Store.removeNotification(id);
+      };
     }
   }, [error]);
 
-  const onSubmit: SubmitHandler<Inputs> = async (data) => {
-    const res = await addAuthor();
+  useEffect(() => {
+    if (isSubmitSuccessful) {
+      reset();
+    }
+  }, [isSubmitSuccessful, reset]);
 
-    console.log(res, 'res');
-    // reset();
-  };
+  const onSubmit: SubmitHandler<Inputs> = async () => await addAuthor();
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className='min-h-[350.33px]'>
