@@ -5,19 +5,15 @@ import { GET_BOOKS } from 'apollo/queries';
 import { GetBooksData } from 'types';
 import { ReactNotifications } from 'react-notifications-component';
 import Loader from 'components/Loader';
-import 'simplebar/dist/simplebar.min.css';
-import 'react-notifications-component/dist/theme.css';
-import 'animate.css/animate.compat.css';
+import useNotification from 'hooks/useNotification';
 
 function App() {
   const { loading, error, data } = useQuery<GetBooksData, null>(GET_BOOKS);
 
+  useNotification(error, undefined, undefined);
+
   if (loading) {
     return <Loader fixed />;
-  }
-
-  if (error) {
-    return <div>{error.message}</div>;
   }
 
   const books = data?.books;

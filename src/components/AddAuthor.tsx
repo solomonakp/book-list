@@ -1,7 +1,8 @@
-import * as yup from 'yup';
+import { string, object } from 'yup';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation } from '@apollo/client';
+import { useEffect } from 'react';
 
 // components
 import Button from 'components/Button';
@@ -10,22 +11,20 @@ import Input from 'components/Input';
 // types and queries
 import { NewAuthorDetails, Author } from 'types';
 import { ADD_AUTHOR } from 'apollo/queries';
-import { GET_AUTHORS } from '../apollo/queries';
-import { useEffect } from 'react';
-import { Store } from 'react-notifications-component';
-import { notificationSettings } from 'utils/functions';
+import { GET_AUTHORS } from 'apollo/queries';
+
+// custom hooks
+import useNotification from 'hooks/useNotification';
 
 interface Inputs {
   name: string;
   age: number;
 }
 
-const schema = yup
-  .object({
-    name: yup.string().required('Please enter a title'),
-    age: yup.string().required('Please enter a number'),
-  })
-  .required();
+const schema = object({
+  name: string().required('Please enter a title'),
+  age: string().required('Please enter a number'),
+}).required();
 
 const AddAuthor = () => {
   const {
@@ -53,22 +52,14 @@ const AddAuthor = () => {
     awaitRefetchQueries: true,
   });
 
-  useEffect(() => {
-    if (error) {
-      console.log('yeah');
-      const id = Store.addNotification({
-        ...notificationSettings,
-        type: 'danger',
-        title: 'Error',
-        message: error.message,
-        container: 'top-right',
-      });
-      return () => {
-        Store.removeNotification(id);
-      };
-    }
-  }, [error]);
+  // notification hook
+  useNotification(
+    error,
+    isSubmitSuccessful,
+    'Author has been successfully added'
+  );
 
+  // resets after submission
   useEffect(() => {
     if (isSubmitSuccessful) {
       reset();

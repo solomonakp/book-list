@@ -4,6 +4,7 @@ import { GetBookData, GetBookVar, BookId } from 'types';
 import { GET_BOOK } from 'apollo/queries';
 import { filterBooksByTitle } from 'utils/functions';
 import Loader from 'components/Loader';
+import useNotification from 'hooks/useNotification';
 
 interface Props {
   bookId: BookId;
@@ -17,12 +18,10 @@ const BookDetails = (props: Props) => {
     skip: !bookId,
   });
 
+  useNotification(error, undefined, undefined);
+
   if (loading) {
     return <Loader />;
-  }
-
-  if (error) {
-    return <div>{error.message}</div>;
   }
 
   if (data) {

@@ -1,5 +1,5 @@
 import { useForm, SubmitHandler } from 'react-hook-form';
-import * as yup from 'yup';
+import { string, object } from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useMutation, useQuery } from '@apollo/client';
 import { useState, useEffect } from 'react';
@@ -9,10 +9,14 @@ import Button from 'components/Button';
 import Input from 'components/Input';
 import Select, { Option } from 'components/Select';
 
+// queries , types utils
 import { GET_AUTHORS, ADD_BOOK, GET_BOOKS } from 'apollo/queries';
 import { Book, GetAuthorsData } from 'types';
 import { createOptions } from 'utils/functions';
 import { NewBookDetails } from 'types';
+
+// custom hooks
+import useNotification from 'hooks/useNotification';
 
 interface Inputs {
   title: string;
@@ -20,16 +24,13 @@ interface Inputs {
   author: string;
 }
 
-const schema = yup
-  .object({
-    title: yup.string().required('Please enter a title'),
-    genre: yup
-      .string()
-      .min(2, 'Please enter a valid Genre')
-      .required('Genre is Required'),
-    author: yup.string().required('Please select an Author'),
-  })
-  .required();
+const schema = object({
+  title: string().required('Please enter a title'),
+  genre: string()
+    .min(2, 'Please enter a valid Genre')
+    .required('Genre is Required'),
+  author: string().required('Please select an Author'),
+}).required();
 
 const AddBook = () => {
   const [options, setOptions] = useState<Array<Option>>([
@@ -47,24 +48,27 @@ const AddBook = () => {
     mode: 'onChange',
   });
 
-  useEffect(() => {
-    if (isSubmitSuccessful) {
-      reset();
-    }
-  }, [isSubmitSuccessful, reset]);
-
   const { author, genre, title } = watch();
 
   const { data, loading } = useQuery<GetAuthorsData>(GET_AUTHORS, {});
 
-  const [addBook] = useMutation<{ addBooks: Book }, NewBookDetails>(ADD_BOOK, {
-    variables: {
-      genre,
-      title,
-      authorId: author,
-    },
-    refetchQueries: [GET_BOOKS, 'GetBooks'],
-  });
+  const [addBook, { error }] = useMutation<{ addBooks: Book }, NewBookDetails>(
+    ADD_BOOK,
+    {
+      variables: {
+        genre,
+        title,
+        authorId: author,
+      },
+      refetchQueries: [GET_BOOKS, 'GetBooks'],
+    }
+  );
+
+  useNotification(
+    error,
+    isSubmitSuccessful,
+    'Book has been successfully added'
+  );
 
   // update select with authors from backend
   useEffect(() => {
@@ -72,6 +76,12 @@ const AddBook = () => {
       setOptions((options) => [...options, ...createOptions(data.authors)]);
     }
   }, [loading, data]);
+
+  useEffect(() => {
+    if (isSubmitSuccessful) {
+      reset();
+    }
+  }, [isSubmitSuccessful, reset]);
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => await addBook();
 

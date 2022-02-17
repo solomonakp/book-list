@@ -1,4 +1,4 @@
-import { Authors, Books, NotificationSettingsType } from 'types';
+import { Authors, Books } from 'types';
 
 export const createOptions = (authors: Authors) => {
   const options = authors.map(({ name, id }) => {
@@ -17,7 +17,6 @@ export const filterBooksByTitle = (books: Books, currentBookTitle: string) => {
 };
 
 export const notificationSettings = {
-  container: 'top-right',
   animationIn: ['animated', 'flipInY'],
   animationOut: ['animated', 'flipOutY'],
   dismiss: {

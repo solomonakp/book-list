@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import AddBook from 'components/AddBook';
 import AddAuthor from 'components/AddAuthor';
-import Button from './Button';
+import Button from 'components/Button';
 
 type AddBookType = 'add-book';
 type AddAuthorType = 'add-author';

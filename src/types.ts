@@ -45,15 +45,3 @@ export interface NewAuthorDetails {
   name: string;
   age: number;
 }
-
-type NotificationType = 'success' | 'danger' | 'info' | 'default' | 'warning';
-
-export interface NotificationSettingsType {
-  title: string;
-  message: string;
-  type: NotificationType;
-  animationIn?: string;
-  animationOut?: string;
-  duration?: number;
-  onRemoval?: (id: string, removalFlag: string) => void;
-}
