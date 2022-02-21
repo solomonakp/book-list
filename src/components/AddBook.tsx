@@ -52,17 +52,21 @@ const AddBook = () => {
 
   const { data, loading } = useQuery<GetAuthorsData>(GET_AUTHORS, {});
 
-  const [addBook, { error }] = useMutation<{ addBooks: Book }, NewBookDetails>(
-    ADD_BOOK,
-    {
-      variables: {
-        genre,
-        title,
-        authorId: author,
-      },
-      refetchQueries: [GET_BOOKS, 'GetBooks'],
-    }
-  );
+  const [addBook, { error, data: addData }] = useMutation<
+    { addBooks: Book },
+    NewBookDetails
+  >(ADD_BOOK, {
+    variables: {
+      genre,
+      title,
+      authorId: author,
+    },
+    refetchQueries: [GET_BOOKS, 'GetBooks'],
+  });
+
+  useEffect(() => {
+    console.log(addData);
+  }, [addData]);
 
   useNotification(
     error,

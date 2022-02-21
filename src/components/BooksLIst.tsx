@@ -27,6 +27,7 @@ const BookList: FC<BookListProps> = ({ books, clickAction, selectedBook }) => {
                 className={`p-4 inline-block border-crayola hover:border-blue-600 hover:text-blue-800 border-2 mr-4 rounded mb-4 cursor-pointer whitespace-nowrap text-sky-700 drop-shadow-2xl transition ease-in-out ${
                   selectedBook === id ? 'border-red-500 text-red-700' : ''
                 }`}
+                data-testid='book-item'
                 onClick={() => clickAction(id)}
               >
                 {title}
