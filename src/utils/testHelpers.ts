@@ -16,7 +16,7 @@ export const BuildBook = build<Book>('Book', {
 
 export const BuildAuthor = build<Author>('Author', {
   fields: {
-    id: sequence(),
+    id: `${sequence()}`,
     age: fake((f) => f.datatype.number(100)),
     name: fake((f) => `${f.name.firstName()} ${f.name.lastName()}`),
     books: [],

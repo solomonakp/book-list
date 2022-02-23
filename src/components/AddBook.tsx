@@ -65,7 +65,7 @@ const AddBook = () => {
   });
 
   useEffect(() => {
-    console.log(addData);
+    console.log(addData, 'add function');
   }, [addData]);
 
   useNotification(

@@ -1,12 +1,6 @@
 import React from 'react';
 
-import {
-  render,
-  fireEvent,
-  waitFor,
-  screen,
-  findByLabelText,
-} from '@testing-library/react';
+import { render, fireEvent, waitFor, screen } from '@testing-library/react';
 import { MockedProvider, MockedResponse } from '@apollo/client/testing';
 import userEvent from '@testing-library/user-event';
 // utils
@@ -17,6 +11,7 @@ import App from 'App';
 
 // queries
 import { GET_BOOKS, GET_AUTHORS, ADD_AUTHOR } from 'apollo/queries';
+import { ADD_BOOK } from '../../apollo/queries';
 
 beforeEach(() => {
   jest.useFakeTimers();
@@ -34,7 +29,7 @@ const setUpApp = (
     </MockedProvider>
   );
 
-describe('bookstore integrations tests', () => {
+describe('bookstore', () => {
   it('displays a loading state while fetching books.', async () => {
     setUpApp([]);
 
@@ -114,16 +109,26 @@ describe('bookstore integrations tests', () => {
       },
       {
         request: {
-          query: ADD_AUTHOR,
-          // variables: {
-          //   title: entry.title,
-          //   authorId: author1.id,
-          //   genre: entry.genre,
-          // },
+          query: GET_BOOKS,
         },
         result: {
           data: {
-            addBook: [{ title: entry.title, genre: entry.genre }],
+            books: [],
+          },
+        },
+      },
+      {
+        request: {
+          query: ADD_BOOK,
+          variables: {
+            genre: entry.genre,
+            title: entry.title,
+            authorId: author1.id,
+          },
+        },
+        result: {
+          data: {
+            addBook: { title: entry.title, genre: entry.genre },
           },
         },
       },
@@ -148,16 +153,21 @@ describe('bookstore integrations tests', () => {
 
     setUpApp(mocks);
 
-    const titleInput = await screen.findByLabelText(/title/i);
-    const genreInput = await screen.findByLabelText(/genre/i);
+    const titleInput = (await screen.findByLabelText(
+      /title/i
+    )) as HTMLInputElement;
+    const genreInput = (await screen.findByLabelText(
+      /genre/i
+    )) as HTMLInputElement;
     const option = (await screen.findByText(author1.name)) as HTMLOptionElement;
     const addBtn = await screen.findByRole('button');
+    const select = (await screen.findByRole('combobox')) as HTMLSelectElement;
 
     expect(addBtn).toBeDisabled();
 
     userEvent.type(titleInput, entry.title);
     userEvent.type(genreInput, entry.genre);
-    userEvent.selectOptions(await screen.findByRole('combobox'), option);
+    userEvent.selectOptions(select, option);
 
     await waitFor(() => {
       expect(option.selected).toBe(true);
@@ -168,7 +178,9 @@ describe('bookstore integrations tests', () => {
     userEvent.click(addBtn);
 
     await waitFor(() => {
-      expect(screen.getByText(/error/i)).toBeInTheDocument();
+      expect(
+        screen.getByText(/Book has been successfully added/i)
+      ).toBeInTheDocument();
     });
 
     // screen.debug(await screen.findByText();
