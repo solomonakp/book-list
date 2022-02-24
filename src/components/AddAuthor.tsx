@@ -76,7 +76,7 @@ const AddAuthor = () => {
 
       <div className='max-w-xs mt-3'>
         <Input
-          label='Title'
+          label='Name'
           error={errors.name?.message}
           {...register('name', { required: true })}
           type='text'

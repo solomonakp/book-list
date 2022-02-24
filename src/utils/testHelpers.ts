@@ -7,17 +7,30 @@ export const BuildBook = build<Book>('Book', {
     title: fake((f) => f.lorem.words(3)),
     author: {
       name: fake((f) => `${f.name.firstName()} ${f.name.lastName()}`),
+      age: fake(
+        (f) =>
+          `${f.datatype.number({
+            min: 15,
+            max: 130,
+          })}`
+      ),
+      books: [],
     },
     genre: fake((f) => f.lorem.word()),
-    id: sequence(),
-    authorId: sequence(),
+    id: sequence((x) => `00${x}4481`),
+    authorId: sequence((x) => `00${x}7635`),
   },
 });
 
 export const BuildAuthor = build<Author>('Author', {
   fields: {
-    id: `${sequence()}`,
-    age: fake((f) => f.datatype.number(100)),
+    id: sequence((x) => `00${x}437`),
+    age: fake((f) =>
+      f.datatype.number({
+        min: 15,
+        max: 130,
+      })
+    ),
     name: fake((f) => `${f.name.firstName()} ${f.name.lastName()}`),
     books: [],
   },

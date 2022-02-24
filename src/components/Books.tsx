@@ -11,8 +11,6 @@ interface BookProps {
 const Books: FC<BookProps> = (props) => {
   const { books } = props;
 
-  console.log(books, 'books');
-
   const [bookId, setBookId] = useState<BookId>(null);
 
   const delegateSelectedBook = useCallback<(id: BookId) => void>(

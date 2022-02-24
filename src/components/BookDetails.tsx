@@ -33,7 +33,8 @@ const BookDetails = (props: Props) => {
       },
     } = data;
 
-    const filterBooks = filterBooksByTitle(books, title);
+    const filterBooks = books ?? filterBooksByTitle(books, title);
+
     return (
       <div className='book-details '>
         <h2 className='mb-8 font-semibold text-2xl mt-14'>{title}</h2>

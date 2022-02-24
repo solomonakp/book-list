@@ -50,23 +50,29 @@ const AddBook = () => {
 
   const { author, genre, title } = watch();
 
-  const { data, loading } = useQuery<GetAuthorsData>(GET_AUTHORS, {});
+  const {
+    data,
+    loading,
+    error: getAuthorError,
+  } = useQuery<GetAuthorsData>(GET_AUTHORS, {});
 
-  const [addBook, { error, data: addData }] = useMutation<
-    { addBooks: Book },
-    NewBookDetails
-  >(ADD_BOOK, {
-    variables: {
-      genre,
-      title,
-      authorId: author,
-    },
-    refetchQueries: [GET_BOOKS, 'GetBooks'],
-  });
+  useNotification(
+    getAuthorError,
+    undefined,
+    'could not fetch authors refresh and try again'
+  );
 
-  useEffect(() => {
-    console.log(addData, 'add function');
-  }, [addData]);
+  const [addBook, { error }] = useMutation<{ addBooks: Book }, NewBookDetails>(
+    ADD_BOOK,
+    {
+      variables: {
+        genre,
+        title,
+        authorId: author,
+      },
+      refetchQueries: [GET_BOOKS, 'GetBooks'],
+    }
+  );
 
   useNotification(
     error,

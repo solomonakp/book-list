@@ -10,8 +10,14 @@ import { BuildBook, BuildAuthor } from 'utils/testHelpers';
 import App from 'App';
 
 // queries
-import { GET_BOOKS, GET_AUTHORS, ADD_AUTHOR } from 'apollo/queries';
-import { ADD_BOOK } from '../../apollo/queries';
+import {
+  GET_BOOKS,
+  GET_BOOK,
+  GET_AUTHORS,
+  ADD_AUTHOR,
+  ADD_BOOK,
+} from 'apollo/queries';
+import { argumentsObjectFromField } from '@apollo/client/utilities';
 
 beforeEach(() => {
   jest.useFakeTimers();
@@ -81,17 +87,18 @@ describe('bookstore', () => {
   });
 
   it('should be able to add a book', async () => {
-    const [book1] = [BuildBook()];
-
     const [author1, author2] = [BuildAuthor(), BuildAuthor()];
 
-    const entry = {
-      ...book1,
-      authorId: author1.id,
-      author: {
-        name: author1.name,
-      },
-    };
+    const [book1] = [
+      BuildBook({
+        overrides: {
+          author: {
+            name: author1.name,
+          },
+          authorId: author1.id,
+        },
+      }),
+    ];
 
     const mocks = [
       {
@@ -121,14 +128,14 @@ describe('bookstore', () => {
         request: {
           query: ADD_BOOK,
           variables: {
-            genre: entry.genre,
-            title: entry.title,
+            genre: book1.genre,
+            title: book1.title,
             authorId: author1.id,
           },
         },
         result: {
           data: {
-            addBook: { title: entry.title, genre: entry.genre },
+            addBook: { title: book1.title, genre: book1.genre },
           },
         },
       },
@@ -140,10 +147,10 @@ describe('bookstore', () => {
           data: {
             books: [
               {
-                authorId: entry.authorId,
-                genre: entry.genre,
-                id: entry.id,
-                title: entry.title,
+                authorId: book1.authorId,
+                genre: book1.genre,
+                id: book1.id,
+                title: book1.title,
               },
             ],
           },
@@ -165,8 +172,8 @@ describe('bookstore', () => {
 
     expect(addBtn).toBeDisabled();
 
-    userEvent.type(titleInput, entry.title);
-    userEvent.type(genreInput, entry.genre);
+    userEvent.type(titleInput, book1.title);
+    userEvent.type(genreInput, book1.genre);
     userEvent.selectOptions(select, option);
 
     await waitFor(() => {
@@ -182,12 +189,182 @@ describe('bookstore', () => {
         screen.getByText(/Book has been successfully added/i)
       ).toBeInTheDocument();
     });
-
-    // screen.debug(await screen.findByText();
-
-    // expect().toBeInTheDocument();
   });
 
-  it('should be able to add to  author', () => {});
-  it('should be able to display errors', () => {});
+  it('should be able to add author', async () => {
+    const [author1, author2, author3] = [
+      BuildAuthor(),
+      BuildAuthor(),
+      BuildAuthor(),
+    ];
+
+    const getAuthorRes = [
+      { id: author1.id, name: author1.name },
+      { id: author2.id, name: author2.name },
+    ];
+
+    const variables = {
+      age: author3.age,
+      name: author3.name,
+    };
+
+    const mocks = [
+      {
+        request: {
+          query: GET_AUTHORS,
+        },
+        result: {
+          data: {
+            authors: getAuthorRes,
+          },
+        },
+      },
+      {
+        request: {
+          query: ADD_AUTHOR,
+          variables,
+        },
+        result: {
+          data: {
+            addAuthor: variables,
+          },
+        },
+      },
+      {
+        request: {
+          query: GET_AUTHORS,
+        },
+        result: {
+          data: {
+            authors: [...getAuthorRes, variables],
+          },
+        },
+      },
+    ];
+
+    setUpApp(mocks);
+
+    const toggleBtn = await screen.findByText(/add author/i);
+
+    fireEvent.click(toggleBtn);
+
+    const nameInput = (await screen.findByLabelText(
+      /name/i
+    )) as HTMLInputElement;
+    const ageInput = (await screen.findByLabelText(/age/i)) as HTMLInputElement;
+
+    const addBtn = await screen.findByRole('button');
+
+    expect(addBtn).toBeDisabled();
+
+    userEvent.type(nameInput, variables.name);
+    userEvent.type(ageInput, variables.age.toString());
+
+    await waitFor(() => {
+      expect(addBtn).toBeEnabled();
+    });
+
+    userEvent.click(addBtn);
+
+    await waitFor(() => {
+      expect(
+        screen.getByText(/author has been successfully added/i)
+      ).toBeInTheDocument();
+    });
+  });
+
+  it('can fetch book details', async () => {
+    const [author1] = [BuildAuthor(), BuildAuthor()];
+
+    const [book1] = [
+      BuildBook({
+        overrides: {
+          author: {
+            name: author1.name,
+          },
+          authorId: author1.id,
+        },
+      }),
+    ];
+
+    const mocks = [
+      {
+        request: {
+          query: GET_BOOKS,
+        },
+        result: {
+          data: {
+            books: [book1],
+          },
+        },
+      },
+      {
+        request: {
+          query: GET_AUTHORS,
+        },
+        result: {
+          data: {
+            authors: [author1],
+          },
+        },
+      },
+      {
+        request: {
+          query: GET_BOOK,
+          variables: {
+            bookId: book1.id,
+          },
+        },
+        result: {
+          data: {
+            book: book1,
+          },
+        },
+      },
+    ];
+    setUpApp(mocks);
+
+    console.log(book1, 'book1');
+
+    const book = await screen.findByText(book1.title);
+
+    fireEvent.click(book);
+
+    // expect(await screen.findByText(book1.genre)).toBeInTheDocument();
+    // expect(
+    //   await screen.findByText(/Click on a book to show its details here/i)
+    // ).not.toBeInTheDocument();
+
+    // await waitFor(() => {
+    //   screen.debug();
+    // });
+  });
+
+  it('should be able to display errors', async () => {
+    const mocks = [
+      {
+        request: {
+          query: GET_BOOKS,
+        },
+        result: {
+          data: {
+            books: [],
+          },
+        },
+      },
+      {
+        request: {
+          query: GET_AUTHORS,
+        },
+        error: new Error('error occurred fetching authors'),
+      },
+    ];
+    setUpApp(mocks);
+
+    await waitFor(() => {
+      expect(
+        screen.getByText(/error occurred fetching authors/i)
+      ).toBeInTheDocument();
+    });
+  });
 });
