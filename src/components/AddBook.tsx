@@ -50,17 +50,7 @@ const AddBook = () => {
 
   const { author, genre, title } = watch();
 
-  const {
-    data,
-    loading,
-    error: getAuthorError,
-  } = useQuery<GetAuthorsData>(GET_AUTHORS, {});
-
-  useNotification(
-    getAuthorError,
-    undefined,
-    'could not fetch authors refresh and try again'
-  );
+  const { data, loading } = useQuery<GetAuthorsData>(GET_AUTHORS, {});
 
   const [addBook, { error }] = useMutation<{ addBooks: Book }, NewBookDetails>(
     ADD_BOOK,

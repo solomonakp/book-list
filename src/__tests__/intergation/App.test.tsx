@@ -274,18 +274,18 @@ describe('bookstore', () => {
   });
 
   it('can fetch book details', async () => {
-    const [author1] = [BuildAuthor(), BuildAuthor()];
+    const [author1] = [BuildAuthor()];
 
-    const [book1] = [
-      BuildBook({
-        overrides: {
-          author: {
-            name: author1.name,
-          },
-          authorId: author1.id,
+    const book = BuildBook({
+      overrides: {
+        author: {
+          name: author1.name,
+          age: author1.age,
+          books: [],
         },
-      }),
-    ];
+        authorId: author1.id,
+      },
+    });
 
     const mocks = [
       {
@@ -294,7 +294,7 @@ describe('bookstore', () => {
         },
         result: {
           data: {
-            books: [book1],
+            books: [book],
           },
         },
       },
@@ -312,32 +312,23 @@ describe('bookstore', () => {
         request: {
           query: GET_BOOK,
           variables: {
-            bookId: book1.id,
+            bookId: book.id,
           },
         },
         result: {
           data: {
-            book: book1,
+            book: book,
           },
         },
       },
     ];
     setUpApp(mocks);
 
-    console.log(book1, 'book1');
+    fireEvent.click(await screen.findByText(book.title));
 
-    const book = await screen.findByText(book1.title);
-
-    fireEvent.click(book);
-
-    // expect(await screen.findByText(book1.genre)).toBeInTheDocument();
-    // expect(
-    //   await screen.findByText(/Click on a book to show its details here/i)
-    // ).not.toBeInTheDocument();
-
-    // await waitFor(() => {
-    //   screen.debug();
-    // });
+    await waitFor(() => {
+      expect(screen.getByText(`Genre: ${book.genre}`)).toBeInTheDocument();
+    });
   });
 
   it('should be able to display errors', async () => {
@@ -345,16 +336,6 @@ describe('bookstore', () => {
       {
         request: {
           query: GET_BOOKS,
-        },
-        result: {
-          data: {
-            books: [],
-          },
-        },
-      },
-      {
-        request: {
-          query: GET_AUTHORS,
         },
         error: new Error('error occurred fetching authors'),
       },
